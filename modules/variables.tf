@@ -9,3 +9,9 @@ variable "lambda_function_name" {
     description = "the name of the lambda function"
     default = "py_tf_lambda"
 }
+
+variable "s3_bucket_name" {
+    type = string
+    description = "the name of the lambda function"
+    default = "client-info-stand-il"
+}
