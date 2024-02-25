@@ -2,3 +2,4 @@
 .terraform.lock.hcl
 lambda_function_src.zip
 index.zip
+metricClick.zip

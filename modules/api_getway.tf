@@ -83,3 +83,109 @@ resource "aws_lambda_permission" "apigw_lambda" {
 
   source_arn = "${aws_api_gateway_rest_api.api_for_lambda.execution_arn}/*/*/*"
 }
+
+
+resource "aws_api_gateway_resource" "metric_lambda" {
+  rest_api_id = aws_api_gateway_rest_api.api_for_lambda.id
+  parent_id   = aws_api_gateway_rest_api.api_for_lambda.root_resource_id
+  path_part   = "metric_lambda"
+}
+
+resource "aws_api_gateway_method" "metric_lambda" {
+  rest_api_id = aws_api_gateway_rest_api.api_for_lambda.id
+  resource_id = aws_api_gateway_resource.metric_lambda.id
+  http_method = "POST"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "metric_lambda" {
+  rest_api_id             = aws_api_gateway_rest_api.api_for_lambda.id
+  resource_id             = aws_api_gateway_resource.metric_lambda.id
+  http_method             = aws_api_gateway_method.metric_lambda.http_method
+  integration_http_method = "POST"
+  type                    = "AWS"
+  uri                     = aws_lambda_function.button_click_lambda.invoke_arn
+}
+
+resource "aws_api_gateway_method_response" "metric_lambda" {
+  rest_api_id = aws_api_gateway_rest_api.api_for_lambda.id
+  resource_id = aws_api_gateway_resource.metric_lambda.id
+  http_method = aws_api_gateway_method.metric_lambda.http_method
+  status_code = "200"
+
+    //cors section
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true,
+    "method.response.header.Access-Control-Allow-Methods" = true,
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
+
+}
+
+resource "aws_api_gateway_integration_response" "metric_lambda" {
+  rest_api_id = aws_api_gateway_rest_api.api_for_lambda.id
+  resource_id = aws_api_gateway_resource.metric_lambda.id
+  http_method = aws_api_gateway_method.metric_lambda.http_method
+  status_code = aws_api_gateway_method_response.metric_lambda.status_code
+
+    //cors
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" =  "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Content-Length,DateX-Amz-Apigw-Id,X-Amzn-Errortype,X-Amzn-Requestid '",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+}
+  
+  depends_on = [
+    aws_api_gateway_method.metric_lambda,
+    aws_api_gateway_integration.metric_lambda
+  ]
+}
+
+resource "aws_api_gateway_method" "metric_lambda_options" {
+  rest_api_id = aws_api_gateway_rest_api.api_for_lambda.id
+  resource_id = aws_api_gateway_resource.metric_lambda.id
+  http_method = "OPTIONS"  
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "metric_lambda_options" {
+  rest_api_id             = aws_api_gateway_rest_api.api_for_lambda.id
+  resource_id             = aws_api_gateway_resource.metric_lambda.id
+  http_method             = aws_api_gateway_method.metric_lambda_options.http_method
+  integration_http_method = "OPTIONS"  
+  type                    = "MOCK"  
+}
+
+resource "aws_api_gateway_method_response" "metric_lambda_options" {
+  rest_api_id = aws_api_gateway_rest_api.api_for_lambda.id
+  resource_id = aws_api_gateway_resource.metric_lambda.id
+  http_method = aws_api_gateway_method.metric_lambda_options.http_method
+  status_code = "200"
+
+    //cors section
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true,
+    "method.response.header.Access-Control-Allow-Methods" = true,
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
+
+}
+
+resource "aws_api_gateway_integration_response" "metric_lambda_options" {
+  rest_api_id = aws_api_gateway_rest_api.api_for_lambda.id
+  resource_id = aws_api_gateway_resource.metric_lambda.id
+  http_method = aws_api_gateway_method.metric_lambda_options.http_method
+  status_code = aws_api_gateway_method_response.metric_lambda_options.status_code
+
+    //cors
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" =  "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Content-Length,DateX-Amz-Apigw-Id,X-Amzn-Errortype,X-Amzn-Requestid '",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+}
+  
+  depends_on = [
+    aws_api_gateway_method.metric_lambda_options,
+    aws_api_gateway_integration.metric_lambda_options
+  ]
+}
