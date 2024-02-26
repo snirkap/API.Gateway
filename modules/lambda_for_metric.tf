@@ -8,8 +8,8 @@ resource "aws_lambda_function" "button_click_lambda" {
   filename         = "metricClick.zip"
   function_name    = "ButtonClickLambda"
   role             = aws_iam_role.iam_for_lambda_metric.arn
-  handler          = "index.handler"
-  runtime          = "nodejs20.x"
+  handler          = "metricClick.lambda_handler"
+  runtime          = "python3.8"
   timeout          = 10 
   memory_size      = 128 
   source_code_hash = data.archive_file.lambda_metric.output_base64sha256
