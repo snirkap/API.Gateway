@@ -28,15 +28,22 @@ resource "aws_iam_role" "iam_for_lambda_metric" {
 }
 
 resource "aws_iam_policy" "cloudwatch_policy" {
-    name        = "CloudWatchPutMetricPolicy"
-    description = "Allows putting metrics to CloudWatch"
+    name        = "CloudWatchPutMetricGetMetricDataPolicy"
+    description = "Allows putting metrics to CloudWatch and getting metric data"
     policy      = jsonencode({
         Version   = "2012-10-17"
-        Statement = [{
-            Effect   = "Allow"
-            Action   = "cloudwatch:PutMetricData"
-            Resource = "*"
-        }]
+        Statement = [
+            {
+                Effect   = "Allow"
+                Action   = "cloudwatch:PutMetricData"
+                Resource = "*"
+            },
+            {
+                Effect   = "Allow"
+                Action   = "cloudwatch:GetMetricData"
+                Resource = "*"
+            }
+        ]
     })
 }
 

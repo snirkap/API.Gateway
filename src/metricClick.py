@@ -25,7 +25,7 @@ def lambda_handler(event, context):
                         }
                     ],
                     'Unit': 'Count',
-                    'Value': 1
+                    'Value': 1  # Increment the value by 1 every time
                 }
             ]
         )
