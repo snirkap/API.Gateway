@@ -27,21 +27,22 @@ resource "aws_iam_role" "iam_for_lambda_metric" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_metric" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-  role       = aws_iam_role.iam_for_lambda_metric.name
+resource "aws_iam_policy" "cloudwatch_policy" {
+    name        = "CloudWatchPutMetricPolicy"
+    description = "Allows putting metrics to CloudWatch"
+    policy      = jsonencode({
+        Version   = "2012-10-17"
+        Statement = [{
+            Effect   = "Allow"
+            Action   = "cloudwatch:PutMetricData"
+            Resource = "*"
+        }]
+    })
 }
 
-resource "aws_cloudwatch_metric_alarm" "button_click_metric_alarm" {
-  alarm_name          = "ButtonClickMetricAlarm"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
-  metric_name         = "ButtonClickedCount"
-  namespace           = "countClick"
-  period              = 60
-  statistic           = "Sum"
-  threshold           = 1
-  alarm_description   = "Alarm when the button click count exceeds 1"
+resource "aws_iam_role_policy_attachment" "lambda_metric" {
+    policy_arn = aws_iam_policy.cloudwatch_policy.arn
+    role       = aws_iam_role.iam_for_lambda_metric.name
 }
 
 resource "aws_lambda_permission" "apigw_lambda_metric" {
@@ -53,5 +54,36 @@ resource "aws_lambda_permission" "apigw_lambda_metric" {
   source_arn = "${aws_api_gateway_rest_api.api_for_lambda.execution_arn}/*/*/*"
 }
 
+resource "aws_cloudwatch_dashboard" "button_click_dashboard" {
+  dashboard_name = "ButtonClickDashboard"
 
+  dashboard_body = jsonencode({
+    widgets = [
+      {
+        type = "metric",
+        x    = 0,
+        y    = 0,
+        width = 12,
+        height = 6,
+        properties = {
+          metrics = [
+            ["countClickButton", "ButtonClickedCount", "Button", "Home", { "region": "us-east-1" }],  
+            ["countClickButton", "ButtonClickedCount", "Button", "Gallery", { "region": "us-east-1" }],
+            ["countClickButton", "ButtonClickedCount", "Button", "Assemble", { "region": "us-east-1" }],    
+          ],
+        "view": "bar",
+        "region": "us-east-1",
+        "legend": {
+            "position": "right"
+          },
+        "stat": "Sum",
+        "period": 60,
+        "liveData": true,
+        "stacked": true,
+        "setPeriodToTimeRange": true
+        }
+      }
+    ]
+  })
+}
 

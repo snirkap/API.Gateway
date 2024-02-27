@@ -1,18 +1,27 @@
 import boto3
 
 def lambda_handler(event, context):
+    # Extract button name from the event
+    button_name = event.get('button_name')
+    
+    if not button_name:
+        return {
+            'statusCode': 400,
+            'body': 'Button name not provided'
+        }
+
     # Increment custom metric in CloudWatch
     cloudwatch = boto3.client('cloudwatch')
     try:
         response = cloudwatch.put_metric_data(
-            Namespace='countClick',  
+            Namespace='countClickButton',  
             MetricData=[
                 {
                     'MetricName': 'ButtonClickedCount',
                     'Dimensions': [
                         {
                             'Name': 'Button',
-                            'Value': 'SpecificButton'
+                            'Value': button_name
                         }
                     ],
                     'Unit': 'Count',
@@ -23,6 +32,10 @@ def lambda_handler(event, context):
         print("Custom metric updated successfully")
     except Exception as e:
         print(f"Error updating custom metric: {e}")
+        return {
+            'statusCode': 500,
+            'body': 'Error updating custom metric'
+        }
 
     return {
         'statusCode': 200,
@@ -31,5 +44,5 @@ def lambda_handler(event, context):
             'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
             'Access-Control-Allow-Methods': 'GET,OPTIONS,POST,PUT'
         },
-        'body': 'Metric updated successfully'
+        'body': f'Metric updated successfully for button: {button_name}'
     }
