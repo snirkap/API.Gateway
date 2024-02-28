@@ -7,6 +7,11 @@ def lambda_handler(event, context):
     if not button_name:
         return {
             'statusCode': 400,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+                'Access-Control-Allow-Methods': 'GET,OPTIONS,POST,PUT'
+            },
             'body': 'Button name not provided'
         }
 
@@ -34,6 +39,11 @@ def lambda_handler(event, context):
         print(f"Error updating custom metric: {e}")
         return {
             'statusCode': 500,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',  
+                'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+                'Access-Control-Allow-Methods': 'GET,OPTIONS,POST,PUT'
+            },
             'body': 'Error updating custom metric'
         }
 
