@@ -9,7 +9,7 @@ def lambda_handler(event, context):
             'statusCode': 400,
             'headers': {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+                'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',  # Ensure this matches the headers you're sending
                 'Access-Control-Allow-Methods': 'GET,OPTIONS,POST,PUT'
             },
             'body': 'Button name not provided'
