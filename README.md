@@ -1,4 +1,7 @@
 # API.Gateway
+## Here you can see a diagram explaining the project:
+![api_getway_diagram drawio](https://github.com/snirkap/API.Gateway/assets/120733215/140f2881-3976-458f-a462-cffd6a707210)
+
 ## Overview:
 This project aims to provide a simple RESTful API gateway utilizing AWS services, specifically AWS API Gateway, AWS Lambda, Amazon S3, and Amazon CloudWatch. It consists of two Lambda functions orchestrated via Terraform scripts to handle different aspects of a web application.
 ### Project Components:
