@@ -6,7 +6,7 @@ data "archive_file" "lambda" {
 
 resource "aws_lambda_function" "client_info_lmabda" {
   filename = "lambda_function_src.zip"
-  function_name = "myLambdaFunction"
+  function_name = var.client_info_lmabda_name
   role = aws_iam_role.iam_for_lambda.arn
   handler = "clientInfo.lambda_handler"
   runtime = "python3.10"
@@ -14,7 +14,7 @@ resource "aws_lambda_function" "client_info_lmabda" {
 }
 
 resource "aws_iam_policy" "s3_write_policy" {
-  name        = "S3WritePolicy"
+  name        = var.aws_iams_3_write_policy_name
   description = "Policy to allow writing to an S3 bucket"
   
   policy = jsonencode({

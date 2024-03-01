@@ -1,5 +1,5 @@
 resource "aws_api_gateway_rest_api" "api_for_lambda" {
-  name        = "api_for_lambda"
+  name        = var.rest_api_name
   endpoint_configuration {
     types = ["REGIONAL"]
   }
@@ -67,7 +67,7 @@ resource "aws_api_gateway_deployment" "deployment" {
   ]
 
   rest_api_id = aws_api_gateway_rest_api.api_for_lambda.id
-  stage_name = "dev"
+  stage_name = var.aws_api_gateway_deployment_name
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_basic" {
