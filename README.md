@@ -20,7 +20,8 @@ This project aims to provide a simple RESTful API gateway utilizing AWS services
 4. **Amazon CloudWatch**:
    - CloudWatch is used for monitoring and logging various metrics related to the system's behavior. Metrics are recorded for button clicks, providing insights into user interaction with the website. Additionally, a dashboard is created in CloudWatch to visualize and analyze these metrics over time.
 #### Here you can see the dashboard we created:
-![WhatsApp Image 2024-02-28 at 15 21 18_dcb1e9f7](https://github.com/snirkap/API.Gateway/assets/120733215/dfc537ab-1391-42e3-aa7b-f421676a1406)
+![WhatsApp Image 2024-02-28 at 15 21 18_dcb1e9f7](https://github.com/snirkap/API.Gateway/assets/120733215/96effae5-1fc6-419a-a85e-6598d870eb4e)
+
 
 
 ### Technologies Used:
