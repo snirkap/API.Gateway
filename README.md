@@ -22,11 +22,24 @@ This project aims to provide a simple RESTful API gateway utilizing AWS services
 #### Here you can see the dashboard we created:
 ![WhatsApp Image 2024-02-28 at 15 21 18_dcb1e9f7](https://github.com/snirkap/API.Gateway/assets/120733215/96effae5-1fc6-419a-a85e-6598d870eb4e)
 
+### Prerequisites:
+* AWS Account with access to API Gateway, Lambda Functions, S3, and Amazon CloudWatch
+* Terraform installed on your local machine
+* Git installed on your local machine
+* awscli installed on your local machine
 
-
-### Technologies Used:
-* Terraform
-* AWS Lambda
-* AWS API Gateway
-* Amazon S3
-* Amazon CloudWatch
+## Setup and Deployment:
+### Clone the Repository
+First, clone this repository to your local machine to get started with the project.
+```
+git clone https://github.com/snirkap/API.Gateway.git
+cd API.Gateway
+```
+### Terraform Initialization and Application
+Navigate to the modules directory within the cloned repository and run the following command to initialize Terraform, allowing it to download necessary providers and modules.
+and change this variable:
+* s3_bucket_name
+```
+terraform init
+terraform apply
+```
