@@ -3,7 +3,14 @@ import time
 import boto3
 import uuid
 
+# Initialize SNS client
+sns = boto3.client('sns')
+
+# Initialize S3 client
 s3 = boto3.client('s3')
+
+# Email address to receive notifications
+email_address = 'snirwork1@gmail.com'
 
 def lambda_handler(event, context):
     try:
@@ -25,6 +32,13 @@ def lambda_handler(event, context):
             ContentType='application/json'
         )
 
+        # Send notification email
+        sns.publish(
+            TopicArn='arn:aws:sns:us-east-1:064195113262:MyLambdaNotificationTopic',
+            Subject='Lambda Notification',
+            Message=f'Lambda function has been triggered. Data stored for {name} with phone number {phone_number}.'
+        )
+
         return {
             'statusCode': 200,
             'headers': {
@@ -32,7 +46,7 @@ def lambda_handler(event, context):
                 'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
                 'Access-Control-Allow-Methods': 'GET,OPTIONS,POST,PUT'
             },
-            'body': json.dumps({'message': 'Data successfully stored in S3'})
+            'body': json.dumps({'message': 'Data successfully stored in S3 and notification sent'})
         }
     except Exception as e:
         return {
